@@ -49,4 +49,68 @@ Aunque la Raspberry Pi 4 es lo suficientemente potente para manejar la interfaz 
 
 
 
+import time
+import tkinter as tk
+from tkinter import ttk
+import serial
+
+puerto_serie = 'COM3'
+ser = serial.Serial(puerto_serie, 115200, timeout=1)
+
+ventana = tk.Tk()
+ventana.title("Control de Ventilador")
+ventana.geometry("400x300")
+
+temperatura = tk.StringVar(value="---")
+humedad = tk.StringVar(value="---")
+ventilador_estado = tk.StringVar(value="Apagado")
+modo_ventilador = tk.StringVar(value="Automático")  # Variable para el modo
+
+def encender_ventilador():
+    ventilador_estado.set("Encendido")
+    modo_ventilador.set("Manual Encendido")
+    ser.write(b'ON\n')
+
+def apagar_ventilador():
+    ventilador_estado.set("Apagado")
+    modo_ventilador.set("Manual Apagado")
+    ser.write(b'OFF\n')
+
+def modo_automatico():
+    modo_ventilador.set("Automático")
+    ser.write(b'AUTO\n')
+
+def actualizar_datos():
+    if ser:
+        linea = ser.readline().decode('utf-8').strip()
+        print(f"Datos recibidos: {linea}")
+        if linea.startswith("temp:") and "hum:" in linea:
+            try:
+                partes = linea.split(',')
+                temp = partes[0].split(':')[1]
+                hum = partes[1].split(':')[1]
+                temperatura.set(temp)
+                humedad.set(hum)
+            except (IndexError, ValueError) as e:
+                print(f"Error procesando datos: {e}")
+    ventana.after(1000, actualizar_datos)
+
+ttk.Label(ventana, text="Temperatura (°C):").pack(pady=5)
+ttk.Label(ventana, textvariable=temperatura, font=("Helvetica", 16)).pack()
+
+ttk.Label(ventana, text="Humedad (%):").pack(pady=5)
+ttk.Label(ventana, textvariable=humedad, font=("Helvetica", 16)).pack()
+
+ttk.Label(ventana, text="Modo del Ventilador:").pack(pady=10)
+ttk.Label(ventana, textvariable=modo_ventilador, font=("Helvetica", 14)).pack()
+
+frame_botones = ttk.Frame(ventana)
+frame_botones.pack(pady=20)
+ttk.Button(frame_botones, text="Encender", command=encender_ventilador).grid(row=0, column=0, padx=10)
+ttk.Button(frame_botones, text="Apagar", command=apagar_ventilador).grid(row=0, column=1, padx=10)
+ttk.Button(frame_botones, text="Automático", command=modo_automatico).grid(row=0, column=2, padx=10)
+
+actualizar_datos()
+ventana.mainloop()
+
 
