@@ -115,4 +115,30 @@ ttk.Button(frame_botones, text="Automático", command=modo_automatico).grid(row=
 actualizar_datos()
 ventana.mainloop()
 
+******************************************************************
 
+Instala virtualenv si no lo tienes ya:
+
+bash
+Copiar código
+sudo pip3 install virtualenv
+Crea un entorno virtual:
+
+bash
+Copiar código
+python3 -m venv mi_entorno
+Activa el entorno virtual:
+
+bash
+Copiar código
+source mi_entorno/bin/activate
+Instala pyserial dentro del entorno virtual:
+
+bash
+Copiar código
+pip install pyserial
+Cuando termines, desactiva el entorno virtual:
+
+bash
+Copiar código
+deactivate
