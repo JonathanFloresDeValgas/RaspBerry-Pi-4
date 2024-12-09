@@ -1,6 +1,52 @@
+sudo apt update 
+sudo apt upgrade
 sudo apt install arduino
 https://dl.espressif.com/dl/package_esp32_index.json
 sudo ./install.sh
 arduino
 sudo usermod -a -G dialout $USER
+
+*************************************************************
+Puerto Serie:
+En la Raspberry Pi, el puerto serie asignado a la ESP32 probablemente será algo como /dev/ttyUSB0 o /dev/ttyACM0, en lugar de COM3. Asegúrate de identificar el puerto correcto antes de ejecutar el programa. Puedes usar el comando ls /dev/tty* en la terminal para buscar el dispositivo una vez conectada la ESP32.
+
+Permisos del Puerto Serie:
+En Linux, los usuarios necesitan permisos para acceder al puerto serie. Si obtienes un error de permisos, puedes otorgártelos temporalmente con:
+
+bash
+Copiar código
+sudo chmod 666 /dev/ttyUSB0
+Para hacerlo permanente, agrega tu usuario al grupo dialout:
+
+bash
+Copiar código
+sudo usermod -a -G dialout $USER
+Luego, cierra y vuelve a iniciar sesión.
+
+Instalación de Python y Librerías:
+Asegúrate de que las librerías tkinter y pyserial estén instaladas en la Raspberry Pi. Puedes instalarlas usando:
+
+bash
+Copiar código
+sudo apt-get install python3-tk
+pip3 install pyserial
+Pruebas Iniciales:
+Antes de ejecutar el programa completo, puedes probar si la Raspberry Pi está recibiendo datos correctamente desde la ESP32 con un script simple:
+
+python
+Copiar código
+import serial
+
+ser = serial.Serial('/dev/ttyUSB0', 115200)
+while True:
+    print(ser.readline().decode('utf-8').strip())
+Performance:
+Aunque la Raspberry Pi 4 es lo suficientemente potente para manejar la interfaz y la comunicación serie, asegúrate de no sobrecargarla con otros procesos pesados al mismo tiempo.
+
+
+
+*********************************************************************************************
+
+
+
 
