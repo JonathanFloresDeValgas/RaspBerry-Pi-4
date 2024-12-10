@@ -144,3 +144,13 @@ Cuando termines, desactiva el entorno virtual:
 bash
 Copiar código
 deactivate
+
+*******************************************
+
+Si estás usando Raspberry Pi:
+En caso de que estés en una Raspberry Pi, también puedes instalar Pillow con:
+
+bash
+Copiar código
+sudo apt update
+sudo apt install python3-pil
