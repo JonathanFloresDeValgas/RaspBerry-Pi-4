@@ -1,7 +1,25 @@
 marshall@raspberrypi
 MARSHALL
 
+sudo apt remove arduino
+Esto desinstalará el paquete principal de Arduino.
 
+Si instalaste Arduino utilizando snap, puedes eliminarlo con:
+
+bash
+Copiar código
+sudo snap remove arduino
+2. Eliminar las bibliotecas y herramientas de la ESP32
+Si instalaste los drivers y herramientas para la ESP32 en Arduino, probablemente también hayas descargado las placas y configurado el entorno de desarrollo para trabajar con la ESP32. Puedes eliminar estas configuraciones con los siguientes pasos:
+
+Eliminar el directorio de configuración de Arduino
+Las configuraciones y las bibliotecas de Arduino suelen estar en tu directorio de usuario. Elimina las configuraciones y las herramientas adicionales de la ESP32:
+
+bash
+Copiar código
+rm -rf ~/.arduino
+rm -rf ~/.arduino15
+rm -rf ~/Arduino
 sudo apt update 
 sudo apt upgrade
 sudo apt install arduino
