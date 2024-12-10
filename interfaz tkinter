@@ -154,3 +154,180 @@ bash
 Copiar código
 sudo apt update
 sudo apt install python3-pil
+
+
+***********************************************************************
+
+
+
+
+import tkinter as tk
+from tkinter import ttk
+from datetime import datetime
+import serial
+import os
+import math
+from PIL import Image, ImageTk  # Para manejar el logo
+
+# Puerto serie
+puerto_serie = 'COM3'
+ser = serial.Serial(puerto_serie, 115200, timeout=1)
+
+# Función para actualizar fecha y hora
+def actualizar_fecha_hora():
+    ahora = datetime.now()
+    fecha_hora.set(ahora.strftime("%d/%m/%Y %H:%M:%S"))
+    ventana.after(1000, actualizar_fecha_hora)
+
+# Función para simular cambio de estado de las alarmas
+def actualizar_estado(temp):
+    if temp < 23:
+        alarmas_label.config(text="OK", bg="green", fg="white")  # Temperatura normal
+    elif 23 <= temp < 30:
+        alarmas_label.config(text="PRECAUCIÓN", bg="yellow", fg="black")  # Alerta por temperatura alta
+    elif temp >= 30:
+        alarmas_label.config(text="CRÍTICO", bg="red", fg="white")  # Alerta crítica por alta temperatura
+
+# Función para encender el ventilador
+def encender_ventilador():
+    ventilador_estado.set("Encendido")
+    modo_ventilador.set("Manual Encendido")
+    ser.write(b'ON\n')
+    ventilador_label.config(bg="green")
+    rotar_ventilador()
+
+# Función para apagar el ventilador
+def apagar_ventilador():
+    ventilador_estado.set("Apagado")
+    modo_ventilador.set("Manual Apagado")
+    ser.write(b'OFF\n')
+    ventilador_label.config(bg="gray")
+    # Detener la rotación del ventilador
+    detener_ventilador()
+
+# Función para cambiar al modo automático
+def modo_automatico():
+    modo_ventilador.set("Automático")
+    ser.write(b'AUTO\n')
+
+# Función para actualizar los datos (temperatura y humedad)
+def actualizar_datos():
+    if ser:
+        try:
+            linea = ser.readline().decode('utf-8').strip()
+            if linea.startswith("temp:") and "hum:" in linea:
+                partes = linea.split(',')
+                temp = float(partes[0].split(':')[1])
+                hum = partes[1].split(':')[1]
+                temperatura.set(f"{temp} °C")
+                humedad.set(f"{hum} %")
+                actualizar_estado(temp)  # Actualiza el estado de alarma según la temperatura
+        except Exception as e:
+            print(f"Error al leer del puerto serie: {e}")
+            alarmas_label.config(text="ERROR", bg="red", fg="white")  # Mostrar error en caso de fallo
+    ventana.after(1000, actualizar_datos)
+
+# Función para rotar el ventilador (girar la hélice)
+def rotar_ventilador():
+    global angulo
+    if ventilador_estado.get() == "Encendido":  # Solo girar si el ventilador está encendido
+        angulo += 10  # Incrementar 10 grados por rotación
+        ventilador_canvas.delete("all")  # Eliminar la hélice anterior
+        dibujar_ventilador()  # Redibujar la hélice girada
+        ventana.after(100, rotar_ventilador)  # Repetir cada 100 ms
+
+# Función para detener el ventilador
+def detener_ventilador():
+    ventilador_canvas.delete("all")  # Eliminar la hélice
+    ventilador_label.config(bg="gray")
+
+# Función para dibujar la hélice
+def dibujar_ventilador():
+    # Dibujar el círculo central (motor)
+    ventilador_canvas.create_oval(90, 90, 110, 110, fill="gray", outline="black")
+
+    # Dibujar las aspas de la hélice (3 aspas)
+    for i in range(3):
+        angulo_rad = math.radians(angulo + i * 120)  # 120 grados entre cada aspa
+        x1 = 100 + 40 * math.cos(angulo_rad)
+        y1 = 100 + 40 * math.sin(angulo_rad)
+        x2 = 100 + 80 * math.cos(angulo_rad)
+        y2 = 100 + 80 * math.sin(angulo_rad)
+        ventilador_canvas.create_line(x1, y1, x2, y2, width=6, fill="green", capstyle=tk.ROUND)
+
+# Crear ventana principal
+ventana = tk.Tk()
+ventana.title("Interfaz HMI - ESPE")
+ventana.geometry("1000x700")  # Tamaño mayor de la ventana
+ventana.configure(bg="lightgray")
+
+# Cargar y mostrar el logo de la ESPE
+logo_path = "C:/Users/MARSHALL/OneDrive - UNIVERSIDAD DE LAS FUERZAS ARMADAS ESPE/ESPE/2024 S-II/CPS/logo.png"  # Aquí debes poner la ruta correcta al logo
+logo_imagen = Image.open(logo_path)
+logo_imagen = logo_imagen.resize((200, 100), Image.Resampling.LANCZOS)
+logo = ImageTk.PhotoImage(logo_imagen)
+
+logo_label = ttk.Label(ventana, image=logo)
+logo_label.grid(row=7, column=0, pady=20, padx=20, sticky="sw")  # Colocarlo en la parte inferior izquierda
+
+# Variables para fecha, hora, estado del ventilador y modo
+fecha_hora = tk.StringVar()
+temperatura = tk.StringVar(value="--- °C")
+humedad = tk.StringVar(value="--- %")
+ventilador_estado = tk.StringVar(value="Apagado")
+modo_ventilador = tk.StringVar(value="Automático")
+angulo = 0  # Ángulo para la rotación
+
+# Título de la pantalla
+ttk.Label(ventana, text="Interfaz de Control - Ventilador", font=("Helvetica", 24, "bold")).grid(row=1, column=0, columnspan=2, pady=20, padx=20)
+
+# Sección de alarmas (centrado)
+alarmas_frame = ttk.Frame(ventana)
+alarmas_frame.grid(row=2, column=0, columnspan=2, pady=10, padx=20, sticky="nsew")
+ttk.Label(alarmas_frame, text="Alarmas:", font=("Helvetica", 16, "bold")).grid(row=0, column=0, pady=10)
+alarmas_label = tk.Label(alarmas_frame, text="OK", font=("Helvetica", 18), bg="green", fg="white", width=20, height=2)
+alarmas_label.grid(row=0, column=1, padx=20)
+
+# Sección de sinóptico (a la izquierda)
+sinoptico_frame = ttk.LabelFrame(ventana, text="Sinóptico", labelanchor="n", width=450, height=300, style="TFrame")
+sinoptico_frame.grid(row=3, column=0, padx=20, pady=10, sticky="nsew")
+sinoptico_frame.grid_propagate(False)
+
+# Señal del modo actual en el sinóptico
+ttk.Label(sinoptico_frame, text="Modo Actual:", font=("Helvetica", 14)).grid(row=0, column=0, padx=20, pady=10, sticky="w")
+ttk.Label(sinoptico_frame, textvariable=modo_ventilador, font=("Helvetica", 14)).grid(row=0, column=1, padx=20, pady=10, sticky="w")
+
+# Ventilador (gráfico)
+ventilador_frame = ttk.Frame(sinoptico_frame)
+ventilador_frame.grid(row=1, column=0, columnspan=2, pady=20)
+
+# Crear el lienzo para dibujar el ventilador
+ventilador_canvas = tk.Canvas(ventilador_frame, width=200, height=200, bg="lightgray")
+ventilador_canvas.grid(row=0, column=0)
+ventilador_label = tk.Label(ventilador_frame, bg="gray", width=10, height=10)
+ventilador_label.grid(row=0, column=1)
+
+# Sección de entrada de comandos y datos (a la derecha)
+entrada_frame = ttk.LabelFrame(ventana, text="Entrada de comandos y datos", labelanchor="n", width=450, height=300, style="TFrame")
+entrada_frame.grid(row=3, column=1, padx=20, pady=10, sticky="nsew")
+entrada_frame.grid_propagate(False)
+
+# Mostrar temperatura y humedad en la sección de Entrada de comandos y datos
+ttk.Label(entrada_frame, text="Temperatura:", font=("Helvetica", 14)).grid(row=0, column=0, padx=20, pady=10, sticky="w")
+ttk.Label(entrada_frame, textvariable=temperatura, font=("Helvetica", 14)).grid(row=0, column=1, padx=20, pady=10, sticky="w")
+ttk.Label(entrada_frame, text="Humedad:", font=("Helvetica", 14)).grid(row=1, column=0, padx=20, pady=10, sticky="w")
+ttk.Label(entrada_frame, textvariable=humedad, font=("Helvetica", 14)).grid(row=1, column=1, padx=20, pady=10, sticky="w")
+
+# Botones de control de ventilador
+ttk.Button(entrada_frame, text="Encender", command=encender_ventilador).grid(row=2, column=0, padx=20, pady=10)
+ttk.Button(entrada_frame, text="Apagar", command=apagar_ventilador).grid(row=2, column=1, padx=20, pady=10)
+ttk.Button(entrada_frame, text="Automático", command=modo_automatico).grid(row=2, column=2, padx=20, pady=10)
+
+# Hora en la esquina inferior derecha
+ttk.Label(ventana, textvariable=fecha_hora, font=("Helvetica", 10)).grid(row=7, column=1, padx=20, pady=20, sticky="se")
+
+# Iniciar actualización de datos
+actualizar_datos()
+actualizar_fecha_hora()
+
+ventana.mainloop()
