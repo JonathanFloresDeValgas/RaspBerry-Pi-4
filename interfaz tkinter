@@ -179,13 +179,13 @@ sudo apt install python3-pil
 
 
 
+
 import tkinter as tk
 from tkinter import ttk
 from datetime import datetime
 import serial
 import os
 import math
-from PIL import Image, ImageTk  # Para manejar el logo
 
 # Puerto serie
 puerto_serie = 'COM3'
@@ -279,14 +279,8 @@ ventana.title("Interfaz HMI - ESPE")
 ventana.geometry("1000x700")  # Tamaño mayor de la ventana
 ventana.configure(bg="lightgray")
 
-# Cargar y mostrar el logo de la ESPE
-logo_path = "C:/Users/MARSHALL/OneDrive - UNIVERSIDAD DE LAS FUERZAS ARMADAS ESPE/ESPE/2024 S-II/CPS/logo.png"  # Aquí debes poner la ruta correcta al logo
-logo_imagen = Image.open(logo_path)
-logo_imagen = logo_imagen.resize((200, 100), Image.Resampling.LANCZOS)
-logo = ImageTk.PhotoImage(logo_imagen)
-
-logo_label = ttk.Label(ventana, image=logo)
-logo_label.grid(row=7, column=0, pady=20, padx=20, sticky="sw")  # Colocarlo en la parte inferior izquierda
+# Mostrar "ESPE" en letras gruesas
+ttk.Label(ventana, text="ESPE", font=("Helvetica", 24, "bold"), foreground="black").grid(row=7, column=0, pady=20, padx=20, sticky="sw")
 
 # Variables para fecha, hora, estado del ventilador y modo
 fecha_hora = tk.StringVar()
