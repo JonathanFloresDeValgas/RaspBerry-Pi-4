@@ -1,0 +1,51 @@
+1. Verifica que tienes la versión adecuada de Arduino IDE
+Asegúrate de tener instalada una versión reciente del Arduino IDE (2.x o posterior).
+Si estás usando una versión antigua, actualízala descargándola desde el sitio oficial de Arduino o usando este comando en Raspberry Pi OS (para una versión 2.x):
+bash
+Copiar código
+sudo apt update
+sudo apt install arduino
+Para la versión más reciente directamente desde Arduino, visita: Arduino IDE Official Download.
+
+2. Agrega el URL del gestor de tarjetas para ESP32
+Abre Arduino IDE.
+Ve a Archivo > Preferencias.
+En el campo de URL adicionales para gestores de tarjetas, añade esta URL para ESP32:
+bash
+Copiar código
+https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+Haz clic en OK para guardar.
+3. Instala las placas ESP32
+Ve a Herramientas > Placa > Gestor de tarjetas.
+Busca ESP32 en el cuadro de búsqueda.
+Selecciona e instala el paquete que aparece (desarrollado por Espressif Systems).
+4. Verifica dependencias en Raspberry Pi
+En algunos casos, pueden faltar paquetes esenciales. Ejecuta estos comandos para asegurarte de que todo esté en orden:
+
+bash
+Copiar código
+sudo apt update
+sudo apt install python3 python3-pip git
+pip3 install pyserial
+5. Soluciona problemas comunes
+Problema: No aparece la opción ESP32 en el Gestor de tarjetas.
+
+Verifica que tienes conexión a Internet.
+Asegúrate de que el URL del gestor de tarjetas esté correcto.
+Problema: La placa ESP32 no se detecta al conectarla por USB.
+
+Verifica permisos del puerto serie:
+bash
+Copiar código
+sudo usermod -a -G dialout $USER
+Luego, reinicia tu Raspberry Pi.
+Instala los controladores adecuados:
+bash
+Copiar código
+sudo apt install python-is-python3
+6. Prueba tu configuración
+Conecta la ESP32 al puerto USB.
+En Arduino IDE, ve a Herramientas y selecciona:
+La placa ESP32 que estás usando (por ejemplo, ESP32 Dev Module).
+El puerto correspondiente (normalmente algo como /dev/ttyUSB0).
+Sube un programa básico, como el de parpadear un LED, para verificar que todo funcione.
