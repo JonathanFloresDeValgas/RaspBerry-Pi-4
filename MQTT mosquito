@@ -1,0 +1,79 @@
+
+Para instalar MQTT (usando Mosquitto, un popular servidor MQTT) en tu Raspberry Pi 4, sigue estos pasos:
+
+1. Actualiza el sistema operativo
+Primero, asegúrate de que tu sistema operativo esté actualizado:
+
+bash
+Copiar código
+sudo apt update
+sudo apt upgrade -y
+2. Instala Mosquitto y su cliente
+Mosquitto está disponible en los repositorios oficiales de Raspberry Pi. Instálalo con el siguiente comando:
+
+bash
+Copiar código
+sudo apt install -y mosquitto mosquitto-clients
+3. Habilita el servicio de Mosquitto
+Configura Mosquitto para que se inicie automáticamente al encender la Raspberry Pi:
+
+bash
+Copiar código
+sudo systemctl enable mosquitto
+Inicia el servicio si aún no está corriendo:
+
+bash
+Copiar código
+sudo systemctl start mosquitto
+4. Verifica que Mosquitto esté funcionando
+Para probar si el servidor MQTT está funcionando, puedes usar los clientes MQTT incluidos:
+
+a. Publicar un mensaje:
+bash
+Copiar código
+mosquitto_pub -h localhost -t test/topic -m "Hello MQTT"
+b. Suscribirse al mismo tema:
+En otra terminal, ejecuta:
+
+bash
+Copiar código
+mosquitto_sub -h localhost -t test/topic
+Deberías ver el mensaje "Hello MQTT" en la terminal del cliente suscrito.
+
+5. Configuración adicional (opcional)
+Por defecto, Mosquitto no requiere autenticación. Si planeas usarlo en una red pública o segura, configura un archivo de contraseña y habilita TLS:
+
+a. Crea un archivo de contraseñas:
+bash
+Copiar código
+sudo mosquitto_passwd -c /etc/mosquitto/passwd your_username
+b. Edita el archivo de configuración:
+Abre el archivo de configuración de Mosquitto:
+
+bash
+Copiar código
+sudo nano /etc/mosquitto/mosquitto.conf
+Agrega estas líneas para habilitar autenticación:
+
+plaintext
+Copiar código
+allow_anonymous false
+password_file /etc/mosquitto/passwd
+Guarda y reinicia Mosquitto:
+
+bash
+Copiar código
+sudo systemctl restart mosquitto
+6. Acceso remoto (opcional)
+Si necesitas acceder al servidor desde otra máquina, asegúrate de abrir el puerto 1883 en el firewall:
+
+bash
+Copiar código
+sudo ufw allow 1883
+7. Verifica conexión desde otro dispositivo
+Usa un cliente MQTT (como MQTT Explorer o mosquitto_sub desde otra máquina) para probar la conexión:
+
+bash
+Copiar código
+mosquitto_sub -h <IP_Raspberry> -t test/topic -u your_username -P your_password
+¡Con esto, tendrás Mosquitto funcionando y configurado! 
