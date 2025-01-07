@@ -1,0 +1,43 @@
+1. Actualiza el sistema operativo
+Abre una terminal y ejecuta los siguientes comandos para asegurarte de que el sistema esté actualizado:
+
+bash
+Copiar código
+sudo apt update
+sudo apt upgrade -y
+2. Instala Node.js desde el repositorio oficial
+Usa el script oficial de NodeSource para instalar la última versión de Node.js compatible con tu Raspberry Pi.
+
+a. Instala curl si no lo tienes:
+bash
+Copiar código
+sudo apt install -y curl
+b. Descarga el script de NodeSource:
+Reemplaza setup_18.x con la versión de Node.js que deseas (por ejemplo, setup_20.x para la versión 20).
+
+bash
+Copiar código
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+c. Instala Node.js:
+bash
+Copiar código
+sudo apt install -y nodejs
+3. Verifica la instalación
+Confirma que Node.js y npm están instalados correctamente verificando sus versiones:
+
+bash
+Copiar código
+node -v
+npm -v
+4. (Opcional) Instala n para gestionar versiones de Node.js
+Si deseas cambiar entre diferentes versiones de Node.js, puedes usar la herramienta n:
+
+bash
+Copiar código
+sudo npm install -g n
+Ejemplo para instalar la última versión estable de Node.js:
+
+bash
+Copiar código
+sudo n stable
+¡Eso es todo! Ahora tienes Node.js configurado en tu Raspberry Pi 4. 😊
