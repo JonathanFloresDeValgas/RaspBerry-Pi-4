@@ -29,6 +29,13 @@ bash
 Copiar código
 node -v
 npm -v
+
+si no se instalo el npm usar 
+
+# Instala 
+sudo apt install nodejs npm -y
+
+
 4. (Opcional) Instala n para gestionar versiones de Node.js
 Si deseas cambiar entre diferentes versiones de Node.js, puedes usar la herramienta n:
 
