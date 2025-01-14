@@ -25,3 +25,47 @@ Copiar código
 mqtt-explorer
 Resumen
 Este método es mucho más sencillo, ya que Snap maneja todas las dependencias y configuraciones por ti. Solo necesitas instalar Snap y luego instalar MQTT Explorer con un solo comando. ¡Eso es todo!
+
+
+
+
+
+
+Método: Instalar MQTT Explorer usando un paquete .deb
+Descargar el paquete .deb:
+
+Ve al sitio oficial de MQTT Explorer y descarga el archivo .deb más reciente. Por ejemplo:
+
+bash
+Copiar código
+wget https://github.com/thomasnordquist/MQTT-Explorer/releases/download/v0.2.4/mqtt-explorer_0.2.4_armhf.deb
+(Sustituye 0.2.4 por la versión más reciente disponible).
+
+Instalar el paquete .deb:
+
+Una vez descargado el archivo .deb, utiliza el siguiente comando para instalarlo:
+
+bash
+Copiar código
+sudo dpkg -i mqtt-explorer_<version>.deb
+Donde <version> es el número de la versión que hayas descargado. Por ejemplo:
+
+bash
+Copiar código
+sudo dpkg -i mqtt-explorer_0.2.4_armhf.deb
+Resolver dependencias (opcional):
+
+Si encuentras problemas con dependencias, utiliza el siguiente comando para solucionarlos:
+
+bash
+Copiar código
+sudo apt --fix-broken install
+Ejecutar MQTT Explorer:
+
+Una vez que la instalación esté completa, puedes abrir MQTT Explorer desde la terminal con:
+
+bash
+Copiar código
+mqtt-explorer
+Resumen
+Este método es sencillo si prefieres instalar usando paquetes .deb. Solo necesitas descargar el archivo, instalarlo con dpkg, y solucionar cualquier posible problema de dependencias con apt --fix-broken install. Luego podrás ejecutar MQTT Explorer fácilmente.
