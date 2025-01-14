@@ -1,0 +1,20 @@
+Pasos para conectarte con MQTT Explorer en la Raspberry Pi:
+Conseguir la IP local de tu Raspberry Pi: Si no la conoces, puedes obtenerla ejecutando el siguiente comando en la terminal de la Raspberry Pi:
+
+bash
+Copiar código
+hostname -I
+Esto te devolverá una IP en formato 192.168.x.x o similar, que es la IP de tu Raspberry Pi dentro de la red local.
+
+Configurar MQTT Explorer: En MQTT Explorer, usa lo siguiente:
+
+Broker: localhost o la IP local obtenida en el paso anterior (por ejemplo, 192.168.1.100).
+Puerto: 1883 (puerto predeterminado de MQTT sin cifrado).
+Si tienes habilitada autenticación en Mosquitto, también deberás ingresar el usuario y la contraseña (si están configurados).
+Ejemplo de configuración en MQTT Explorer:
+Broker: localhost o 192.168.x.x (tu IP local)
+Puerto: 1883
+Nota:
+Si usas localhost, MQTT Explorer se conectará a Mosquitto que está corriendo en la misma Raspberry Pi sin necesidad de usar la IP local. Si prefieres usar la IP, también funcionará de la misma manera, ya que es la dirección IP interna de la Raspberry Pi en la red local.
+
+De esta forma, podrás conectar MQTT Explorer a Mosquitto en la misma Raspberry Pi y comenzar a ver los mensajes de los tópicos MQTT.
