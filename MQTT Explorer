@@ -1,0 +1,27 @@
+Método más fácil: Instalar MQTT Explorer usando Snap
+Instalar Snap en tu Raspberry Pi:
+
+Si aún no tienes Snap instalado en tu Raspberry Pi, puedes instalarlo con los siguientes comandos en la terminal:
+
+bash
+Copiar código
+sudo apt update
+sudo apt install snapd
+Instalar MQTT Explorer usando Snap:
+
+Una vez que Snap esté instalado, puedes instalar MQTT Explorer de manera sencilla ejecutando el siguiente comando:
+
+bash
+Copiar código
+sudo snap install mqtt-explorer
+Esto descargará e instalará MQTT Explorer desde la tienda de Snap.
+
+Ejecutar MQTT Explorer:
+
+Una vez que la instalación esté completa, puedes abrir MQTT Explorer desde la terminal o desde el menú de aplicaciones de tu Raspberry Pi con:
+
+bash
+Copiar código
+mqtt-explorer
+Resumen
+Este método es mucho más sencillo, ya que Snap maneja todas las dependencias y configuraciones por ti. Solo necesitas instalar Snap y luego instalar MQTT Explorer con un solo comando. ¡Eso es todo!
