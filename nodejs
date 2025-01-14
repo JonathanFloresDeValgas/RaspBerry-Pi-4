@@ -113,3 +113,30 @@ bash
 Copiar código
 node-red-rebuild
 
+
+
+
+
+
+
+
+
+1. Instalar el paquete del Dashboard
+Primero necesitas instalar el paquete del dashboard de Node-RED. Para ello:
+
+Asegúrate de que Node-RED esté instalado y ejecutándose en tu Raspberry Pi.
+Abre la terminal y escribe el siguiente comando para instalar el paquete:
+bash
+Copiar código
+cd ~/.node-red
+npm install node-red-dashboard
+Reinicia Node-RED para que los nuevos nodos del dashboard estén disponibles:
+bash
+Copiar código
+node-red-restart
+2. Abrir Node-RED
+Abre un navegador en tu Raspberry Pi o en otro dispositivo conectado a la misma red.
+Accede a la interfaz de Node-RED escribiendo en la barra de direcciones:
+arduino
+Copiar código
+http://<IP_de_tu_Raspberry>:1880
