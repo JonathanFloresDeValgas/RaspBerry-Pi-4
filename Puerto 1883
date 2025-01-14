@@ -1,0 +1,31 @@
+Pasos para habilitar el puerto 1883 en Mosquitto:
+Verifica la configuración de Mosquitto:
+
+En el archivo de configuración de Mosquitto, generalmente ubicado en /etc/mosquitto/mosquitto.conf, asegúrate de que el puerto 1883 esté habilitado.
+Abre el archivo de configuración con un editor de texto, por ejemplo:
+
+bash
+Copiar código
+sudo nano /etc/mosquitto/mosquitto.conf
+Habilita el puerto 1883: Busca la línea que define el puerto de escucha. Asegúrate de que esté configurado de la siguiente manera:
+
+bash
+Copiar código
+listener 1883
+Esto indica que Mosquitto debe escuchar en el puerto 1883 para conexiones sin cifrado.
+
+Reinicia el servicio Mosquitto: Una vez que hayas confirmado que el puerto 1883 está habilitado en el archivo de configuración, reinicia el servicio de Mosquitto para que los cambios tengan efecto:
+
+bash
+Copiar código
+sudo systemctl restart mosquitto
+Verifica que Mosquitto está escuchando en el puerto 1883: Puedes verificar que Mosquitto está escuchando correctamente en el puerto 1883 usando el siguiente comando:
+
+bash
+Copiar código
+sudo netstat -tuln | grep 1883
+Esto debería mostrar algo similar a:
+
+ruby
+Copiar código
+tcp   0   0 0.0.0.0:1883  0.0.0.0:*   LISTEN
